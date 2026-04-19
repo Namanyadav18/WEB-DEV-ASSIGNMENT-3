@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master — Question {{ question_num }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="quiz-card">
+            <!-- Header -->
+            <div class="quiz-header">
+                <span class="quiz-logo">🧠 Quiz Master</span>
+                <span class="question-counter">{{ question_num }} / {{ total }}</span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" style="width: {{ progress }}%"></div>
+            </div>
+
+            <!-- Question -->
+            <div class="question-box">
+                <p class="question-label">Question {{ question_num }}</p>
+                <h2 class="question-text">{{ question.question }}</h2>
+            </div>
+
+            <!-- Options -->
+            <form method="POST" action="/quiz" id="quiz-form">
+                <div class="options-grid">
+                    {% for option in question.options %}
+                    <label class="option-card">
+                        <input type="radio" name="answer" value="{{ option }}" required>
+                        <span class="option-letter">{{ loop.index0 | option_letter }}</span>
+                        <span class="option-text">{{ option }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn-next">
+                    {% if question_num == total %}View Results 🏁{% else %}Next Question →{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Highlight selected option visually
+        document.querySelectorAll('.option-card input').forEach(radio => {
+            radio.addEventListener('change', () => {
+                document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+                radio.closest('.option-card').classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>

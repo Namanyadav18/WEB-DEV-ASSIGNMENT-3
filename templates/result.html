@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master — Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="result-card">
+            <!-- Score Circle -->
+            <div class="score-circle {{ feedback_class }}">
+                <span class="score-number">{{ score }}</span>
+                <span class="score-divider">/</span>
+                <span class="score-total">{{ total }}</span>
+            </div>
+
+            <p class="score-percent">{{ percentage }}% Correct</p>
+            <p class="feedback-msg {{ feedback_class }}">{{ feedback }}</p>
+
+            <!-- Review Section -->
+            <div class="review-section">
+                <h3 class="review-title">📋 Answer Review</h3>
+                {% for item in review %}
+                <div class="review-item {{ 'correct' if item.is_correct else 'wrong' }}">
+                    <div class="review-q">
+                        <span class="review-icon">{{ '✅' if item.is_correct else '❌' }}</span>
+                        <strong>Q{{ loop.index }}:</strong> {{ item.question }}
+                    </div>
+                    <div class="review-answers">
+                        <span class="correct-ans">✔ {{ item.correct }}</span>
+                        {% if not item.is_correct and item.selected %}
+                        <span class="your-ans">✘ Your answer: {{ item.selected }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <a href="/start" class="btn-start">🔀 Play Again (Shuffled)</a>
+            <a href="/" class="btn-home">🏠 Home</a>
+        </div>
+    </div>
+</body>
+</html>
